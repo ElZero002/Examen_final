@@ -16,7 +16,7 @@ HTML = """
 
 <div class="container py-5">
     <div class="card shadow p-4" style="max-width: 600px; margin:auto;">
-        <h2 class="text-center mb-4">Proyecto AMSG DevOps Mejorado</h2>
+        <h2 class="text-center mb-4">Proyecto DevOps</h2>
 
         <form method="POST" action="/">
             <label class="form-label">Ingrese su nombre:</label>
