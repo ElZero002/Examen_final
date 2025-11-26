@@ -11,12 +11,87 @@ HTML = """
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AMSG DevOps Mejorado</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: radial-gradient(circle, #0b0f0c, #000000);
+            color: #e3ffe3;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .card {
+            background: rgba(10, 15, 10, 0.9);
+            border: 1px solid #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+
+        h2 {
+            color: #00ff88;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px #00ff88;
+        }
+
+        .form-control {
+            background: #0d1510;
+            border: 1px solid #008a55;
+            color: #baffd5;
+        }
+
+        .form-control:focus {
+            border-color: #00ff88;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+            background: #0f1f17;
+            color: #e2ffe9;
+        }
+
+        .btn-primary {
+            background-color: #00ff88;
+            border: none;
+            color: black;
+            font-weight: bold;
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        .btn-primary:hover {
+            background-color: #00cc6b;
+            box-shadow: 0 0 15px #00ff88;
+        }
+
+        .btn-secondary {
+            background-color: #1d1d1d;
+            border: 1px solid #00ff88;
+            color: #00ff88;
+        }
+
+        .btn-secondary:hover {
+            background-color: #111;
+            color: #00ffaa;
+        }
+
+        .btn-dark {
+            background-color: #00331f;
+            border: 1px solid #00ff88;
+            color: #00ff88;
+        }
+
+        .btn-dark:hover {
+            background-color: #004d2c;
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        .alert-info {
+            background-color: rgba(0, 255, 136, 0.1);
+            border-left: 4px solid #00ff88;
+            color: #baffd5;
+        }
+    </style>
 </head>
 <body class="bg-light">
 
 <div class="container py-5">
     <div class="card shadow p-4" style="max-width: 600px; margin:auto;">
-        <h2 class="text-center mb-4">Proyecto DevOps</h2>
+        <h2 class="text-center mb-4">Jary Cuji</h2>
 
         <form method="POST" action="/">
             <label class="form-label">Ingrese su nombre:</label>
