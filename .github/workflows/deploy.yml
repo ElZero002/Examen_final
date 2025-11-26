@@ -2,7 +2,7 @@ name: Deploy Final JSCU
 #
 on:
   push:
-    branches: ["usina"]
+    branches: ["usiña"]
 
 permissions:
   contents: read
