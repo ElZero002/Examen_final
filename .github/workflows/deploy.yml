@@ -1,5 +1,5 @@
 name: Deploy Final JSCU
-#
+
 on:
   push:
     branches: ["usiña"]
@@ -67,6 +67,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
     - name: 📤 Copy stack.yml to VPS
       uses: appleboy/scp-action@v1
       with:
@@ -74,7 +77,10 @@ jobs:
         username: ${{ secrets.VPS_USER }}
         password: ${{ secrets.VPS_PASSWORD }}
         port: ${{ secrets.VPS_SSH_PORT }}
-        source: "stack.yml"
+
+        # 🔥 RUTA CORREGIDA
+        # stack.yml NO está en raíz — se envía desde finaljary/
+        source: "finaljary/stack.yml"
         target: "/home/${{ secrets.VPS_USER }}/despliegue"
 
     - name: 🚀 Ejecutar despliegue en el servidor
@@ -91,7 +97,7 @@ jobs:
           echo "📥 Pull de la nueva imagen"
           docker pull ghcr.io/${{ env.REPO_OWNER }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
-          echo "🗑️ Borrando stack anterior..."
+          echo "🗑️ Eliminando stack anterior..."
           docker stack rm usina || true
 
           echo "⏳ Esperando liberación..."
@@ -101,5 +107,5 @@ jobs:
           cd ~/despliegue
           docker stack deploy --with-registry-auth -c stack.yml usina
 
-          echo "🔍 Verificando servicios..."
+          echo "🔍 Verificando..."
           docker service ls
