@@ -1,28 +1,51 @@
-# Nombre del proyecto / imagen
-APP_NAME=finaljary
-USER=elzero002
-IMAGE=ghcr.io/$(USER)/$(APP_NAME):latest
+APP=usina
+IMAGE_OWNER=elzero002
+IMAGE_TAG=1.0.5
+REGISTRY=ghcr.io
+IMAGE=$(REGISTRY)/$(IMAGE_OWNER)/$(APP):$(IMAGE_TAG)
 
-# Puerto interno donde escucha Flask
-PORT=8816
+install:
+	python -m pip install --upgrade pip
+	if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-# Ejecutar localmente sin Docker
 run:
 	python app.py
 
-# Construir imagen Docker local
+test:
+	pytest -v --tb=short
+
 build:
-	docker build -t $(APP_NAME) .
+	docker build -t $(IMAGE) .
 
-# Ejecutar contenedor local para pruebas
 run-docker:
-	docker run -p $(PORT):$(PORT) $(APP_NAME)
+	docker run -p 5000:5000 $(IMAGE)
 
-# Subir imagen al GHCR (para que Swarm la use)
+login-ghcr:
+	echo "${GHCR_PAT}" | docker login ghcr.io -u $(IMAGE_OWNER) --password-stdin
+
 push:
-	docker tag $(APP_NAME) $(IMAGE)
 	docker push $(IMAGE)
 
-# Limpiar basura
+build-push: build push
+
+deploy:
+	ssh -p $(VPS_SSH_PORT) $(VPS_USER)@$(VPS_HOST) "\
+		echo \"Logeando en GHCR\" && \
+		echo \"$$GHCR_PAT\" | docker login ghcr.io -u $(IMAGE_OWNER) --password-stdin && \
+		cd ~/despliegue && \
+		docker pull $(IMAGE) && \
+		docker stack rm $(APP) || true && \
+		sleep 15 && \
+		docker stack deploy --with-registry-auth -c stack.yml $(APP)"
+
+upload-stack:
+	scp -P $(VPS_SSH_PORT) finaljary/stack.yml $(VPS_USER)@$(VPS_HOST):~/despliegue/
+
+full:
+	make test
+	make build-push
+	make upload-stack
+	make deploy
+
 clean:
 	docker system prune -f

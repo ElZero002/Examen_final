@@ -31,11 +31,11 @@ jobs:
     - name: 📦 Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     
     - name: 🔍 Run pytest
       run: |
-        pytest -v --tb=short
+        pytest -v --tb=short || exit 1
         echo "✅ Tests completados con éxito!"
 
   build:
@@ -70,6 +70,15 @@ jobs:
     - name: 📥 Checkout code
       uses: actions/checkout@v4
 
+    - name: 🔎 Verificar archivo stack.yml antes de enviar
+      run: |
+        echo "Contenido actual de finaljary/"
+        ls -la finaljary || true
+        if [ ! -f finaljary/stack.yml ]; then
+          echo "❌ ERROR: No existe finaljary/stack.yml"
+          exit 1
+        fi
+
     - name: 📤 Copy stack.yml to VPS
       uses: appleboy/scp-action@v1
       with:
@@ -78,10 +87,10 @@ jobs:
         password: ${{ secrets.VPS_PASSWORD }}
         port: ${{ secrets.VPS_SSH_PORT }}
 
-        # 🔥 RUTA CORREGIDA
-        # stack.yml NO está en raíz — se envía desde finaljary/
+        # 🔥 RUTA CORREGIDA + validada
         source: "finaljary/stack.yml"
         target: "/home/${{ secrets.VPS_USER }}/despliegue"
+        strip_components: 0
 
     - name: 🚀 Ejecutar despliegue en el servidor
       uses: appleboy/ssh-action@v1
