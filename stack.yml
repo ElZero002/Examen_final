@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  usina:
+    image: ghcr.io/elzero002/usina:1.0.5
+    deploy:
+      replicas: 1
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.usina.entrypoints=http"
+        - "traefik.http.routers.usina.rule=Host(`usina.byronrm.com`)"
+        - "traefik.http.middlewares.usina-https-redirect.redirectscheme.scheme=https"
+        - "traefik.http.routers.usina.middlewares=usina-https-redirect"
+        - "traefik.http.routers.usina-secure.entrypoints=https"
+        - "traefik.http.routers.usina-secure.rule=Host(`usina.byronrm.com`)"
+        - "traefik.http.routers.usina-secure.tls=true"
+        - "traefik.http.routers.usina-secure.tls.certresolver=http"
+        - "traefik.http.routers.usina-secure.service=usina"
+        - "traefik.http.services.usina.loadbalancer.server.port=8816"
+        - "traefik.docker.network=traefik-public"
+    networks:
+      - traefik-public
+
+networks:
+  traefik-public:
+    external: true
