@@ -1,7 +1,7 @@
 from flask import Flask, render_template_string, request, session
 
 app = Flask(__name__)
-app.secret_key = "clave-super-secreta"  # necesaria para usar session
+app.secret_key = "clave-super-secreta"
 
 HTML = """
 <!DOCTYPE html>
@@ -27,9 +27,7 @@ HTML = """
                 <button class="btn btn-secondary w-50" name="accion" value="limpiar">Limpiar</button>
             </div>
 
-            <!-- 🔥 BOTÓN NUEVO PARA CONTAR CLICKS -->
             <button class="btn btn-dark w-100 mt-3" name="accion" value="contar">Contar Click</button>
-
         </form>
 
         {% if mensaje %}
@@ -48,7 +46,6 @@ HTML = """
 def home():
     mensaje = None
 
-    # Inicializar contador
     if "contador" not in session:
         session["contador"] = 0
 
@@ -57,7 +54,7 @@ def home():
         nombre = request.form.get("nombre")
 
         if accion == "saludar":
-            mensaje = f"Hola {nombre}. Bienvenido."
+            mensaje = f"Hola {nombre}. Bienvenido al proyecto."
 
         elif accion == "limpiar":
             session["contador"] = 0
